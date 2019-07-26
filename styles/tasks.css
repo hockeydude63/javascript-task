@@ -119,7 +119,7 @@ select {
     font-weight: bold;
 }
 
-lable.error {
+label.error {
     color: red;
     font-weight: bold;
 }
