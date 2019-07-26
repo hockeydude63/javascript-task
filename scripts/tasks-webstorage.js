@@ -11,7 +11,7 @@ storageEngine = function() {
             }
         },
 
-        initObjectStore:function(type, successCallback,errorCallback) {
+        initObjectStore:function(type, successCallback, errorCallback) {
             if (!initialized) {
                 errorCallback('storage_api_not_initialized', 'The storage engine has not been initialized');
             } else if (!localStorage.getItem(type)) {
@@ -22,23 +22,31 @@ storageEngine = function() {
         },
 
         save:function(type, obj, successCallback, errorCallback) {
-
+            if (!initialized) {
+                errorCallback('storage_api_not_initialized', 'The storage engine has not been initialized');
+            } else if(!initializedObjectStores[type]) {
+                errorCallback('storage_not_initialized', 'The object store ' + type + ' has not been initialized');
+            }
+            if (!obj.id) {
+                obj.id = $.now();
+            }           
+            var savedTypeString = localStorage.getItem(type);
+            var storageItem = JSON.parse(savedTypeString);
+            storageItem[obj.id] = obj;
+            localStorage.setItem(type, JSON.stringify(storageItem));
+            successCallback(obj);
         },
 
         findAll:function(type, successCallback, errorCallback) {
-
         },
 
         delete:function(type, id, successCallback, errorCallback) {
-
         },
 
         findByProperty:function(type, propertyName, propertyValue, successCallback, errorCallback) {
-
         },
 
         findById:function(type, id, successCallback, errorCallback) {
-
         }
     }
 }();
